@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tell_me_something/theme/colors.dart';
-import 'package:tell_me_something/widgets/side_bar_button.dart';
+import 'package:tell_me_something/widgets/side_bar/side_bar_button.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
