@@ -6,7 +6,7 @@ settings=Settings()
 class LLMService:
     def __init__(self):
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        self.model=genai.GenerativeModel("gemini-3-flash-preview")
+        self.model=genai.GenerativeModel("gemini-flash-lite-latest")
         
     
     def generate_response(self,query:str,search_results:list[dict]):
@@ -35,5 +35,7 @@ class LLMService:
         * Base the response primarily on the supplied information.
         """
         
-        response=self.model.generate_content(full_prompt)
-        return response.text
+        response=self.model.generate_content(full_prompt, stream=True)
+        for chunk in response:
+            yield chunk.text
+        

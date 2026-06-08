@@ -30,27 +30,32 @@ class SortSourceService:
         query_embedding = self.embedding_model.encode(query)
         relevent_docs = []
         
-        for res in search_results:
-            if res is None or not isinstance(res, dict) or res.get('content') is None:
-                continue
+        try:
+            for res in search_results:
+                if res is None or not isinstance(res, dict) or res.get('content') is None:
+                    continue
+                    
+                content_text = str(res['content']).strip()
+                if not content_text:
+                    continue
                 
-            content_text = str(res['content']).strip()
-            if not content_text:
-                continue
-            
-            res_embedding = self.embedding_model.encode(content_text)
-            
-            dot_product = np.dot(query_embedding, res_embedding)
-            norm_q = np.linalg.norm(query_embedding)
-            norm_r = np.linalg.norm(res_embedding)
-            
-            if norm_q == 0 or norm_r == 0:
-                continue
+                res_embedding = self.embedding_model.encode(content_text)
                 
-            similarity = dot_product / (norm_q * norm_r)
-            res['relevance_score'] = float(similarity)
-            
-            if similarity > 0.3:
-                relevent_docs.append(res)
+                dot_product = np.dot(query_embedding, res_embedding)
+                norm_q = np.linalg.norm(query_embedding)
+                norm_r = np.linalg.norm(res_embedding)
                 
-        return sorted(relevent_docs, key=lambda x: x['relevance_score'], reverse=True)
+                if norm_q == 0 or norm_r == 0:
+                    continue
+                    
+                similarity = dot_product / (norm_q * norm_r)
+                res['relevance_score'] = float(similarity)
+                
+                if similarity > 0.3:
+                    relevent_docs.append(res)
+                    
+        except Exception as e:
+            print(f"Error during source sorting: {e}")
+            
+        finally:
+            return sorted(relevent_docs, key=lambda x: x['relevance_score'], reverse=True)
