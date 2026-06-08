@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:tell_me_something/services/chat_web_service.dart';
 import 'package:tell_me_something/theme/colors.dart';
 import 'package:tell_me_something/widgets/search_section/search_section.dart';
 import 'package:tell_me_something/widgets/side_bar/side_bar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ChatWebService().connect();
+  }
 
   @override
   Widget build(BuildContext context) {
