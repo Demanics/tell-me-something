@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tell_me_something/pages/chat_page.dart';
 import 'package:tell_me_something/services/chat_web_service.dart';
 import 'package:tell_me_something/theme/colors.dart';
-import 'package:tell_me_something/widgets/search_section/search_bar_button.dart';
+import 'package:tell_me_something/widgets/search_sections/search_bar_button.dart';
 
 class SearchSection extends StatefulWidget {
   const SearchSection({super.key});
@@ -53,6 +54,7 @@ class _SearchSectionState extends State<SearchSection> {
                   bottom: 4,
                 ),
                 child: TextField(
+                  maxLines: 5,
                   controller: queryController,
                   decoration: InputDecoration(
                     hint: Text('Search '),
@@ -80,6 +82,12 @@ class _SearchSectionState extends State<SearchSection> {
                     GestureDetector(
                       onTap: () {
                         ChatWebService().chat(queryController.text.trim());
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ChatPage(question: queryController.text.trim()),
+                          ),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.all(9),
